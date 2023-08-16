@@ -23,10 +23,15 @@ pub enum Actions {
 
 #[derive(ValueEnum, Clone, Copy)]
 pub enum Stageable {
-
+	Unstaged,
+	Modified,
+	Deleted,
 }
 
 #[derive(ValueEnum, Clone, Copy)]
 pub enum UnStageable {
-
+	Added,
+	Modified,
+	Renamed,
+	Deleted
 }
