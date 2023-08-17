@@ -38,7 +38,7 @@ impl Stats {
 
 fn parse_status(stats: &mut Stats) -> Option<()> {
 	let status = git::status()?;
-	let regex = Regex::new(r"^(.{2}) ([^(?: \->)\n]*)(?: -> )?(.*)?$").unwrap();
+	let regex = Regex::new(r"(.)(.) ([^(?: \-> )\n]+)(?: -> )?(.*)?($|\n)").unwrap();
 	let captures = regex.captures_iter(&status);
 	for capture in captures {
 		let path = capture[3].to_owned();
