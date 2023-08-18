@@ -8,7 +8,7 @@ use clap::ValueEnum;
 #[command(author, about, next_line_help = true)]
 pub struct Args {
 	#[command(subcommand)]
-	action: Actions,
+	pub action: Actions,
 }
 
 #[derive(Subcommand)]

@@ -4,7 +4,7 @@ use crate::git;
 
 #[derive(Debug)]
 pub struct GitStatus {
-	pub unstaged: Vec<String>,
+	pub new: Vec<String>,
 	pub added: Vec<String>,
 	pub staged_modifications: Vec<String>,
 	pub unstaged_modifications: Vec<String>,
@@ -14,9 +14,9 @@ pub struct GitStatus {
 }
 
 impl GitStatus {
-	fn new() -> Self {
+	fn blank() -> Self {
 		Self {
-			unstaged: vec![],
+			new: vec![],
 			added: vec![],
 			staged_modifications: vec![],
 			unstaged_modifications: vec![],
@@ -26,8 +26,8 @@ impl GitStatus {
 		}
 	}
 
-	pub fn new_from_git_status() -> Option<Self> {
-		let mut stats = GitStatus::new();
+	pub fn new() -> Option<Self> {
+		let mut stats = GitStatus::blank();
 		parse_status(&mut stats)?;
 		if are_all_empty(&stats) {
 			None
@@ -52,7 +52,7 @@ fn parse_status(stats: &mut GitStatus) -> Option<()> {
 				let staged_deletion = capture[4].to_owned();
 				stats.renamed.push(staged_deletion)
 			}
-			"?" => stats.unstaged.push(path.clone()),
+			"?" => stats.new.push(path.clone()),
 			&_ => (),
 		}
 		match &capture[2] {
@@ -70,6 +70,6 @@ fn are_all_empty(stats: &GitStatus) -> bool {
 		&& stats.unstaged_modifications.is_empty()
 		&& stats.renamed.is_empty()
 		&& stats.staged_modifications.is_empty()
-		&& stats.unstaged.is_empty()
+		&& stats.new.is_empty()
 		&& stats.staged_deletions.is_empty()
 }
