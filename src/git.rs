@@ -7,7 +7,7 @@ pub fn status() -> Result<String, &'static str> {
 		.arg("status")
 		.arg("--porcelain")
 		.output() {
-			Err(_) => return Err("couldn't run `git`. is it installed and in the $PATH?"),
+			Err(_) => return Err("`git` is not in your $PATH"),
 			Ok(v) => v
 		};
 	if !output.status.success() {
