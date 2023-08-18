@@ -3,7 +3,7 @@ use regex::Regex;
 use crate::git;
 
 #[derive(Debug)]
-pub struct Stats {
+pub struct GitStatus {
 	pub unstaged: Vec<String>,
 	pub added: Vec<String>,
 	pub staged_modifications: Vec<String>,
@@ -13,7 +13,7 @@ pub struct Stats {
 	pub staged_deletions: Vec<String>,
 }
 
-impl Stats {
+impl GitStatus {
 	fn new() -> Self {
 		Self {
 			unstaged: vec![],
@@ -25,8 +25,9 @@ impl Stats {
 			staged_deletions: vec![],
 		}
 	}
+
 	pub fn new_from_git_status() -> Option<Self> {
-		let mut stats = Stats::new();
+		let mut stats = GitStatus::new();
 		parse_status(&mut stats)?;
 		if are_all_empty(&stats) {
 			None
@@ -36,7 +37,7 @@ impl Stats {
 	}
 }
 
-fn parse_status(stats: &mut Stats) -> Option<()> {
+fn parse_status(stats: &mut GitStatus) -> Option<()> {
 	let status = git::status()?;
 	let regex = Regex::new(r"(.)(.) ([^(?: \-> )\n]+)(?: -> )?(.*)?($|\n)").unwrap();
 	let captures = regex.captures_iter(&status);
@@ -63,7 +64,7 @@ fn parse_status(stats: &mut Stats) -> Option<()> {
 	Some(())
 }
 
-fn are_all_empty(stats: &Stats) -> bool {
+fn are_all_empty(stats: &GitStatus) -> bool {
 	stats.added.is_empty()
 		&& stats.unstaged_deletions.is_empty()
 		&& stats.unstaged_modifications.is_empty()

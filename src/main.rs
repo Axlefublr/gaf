@@ -1,13 +1,15 @@
-// use crate::args::Args;
-use crate::parser::Stats;
-// use clap::Parser;
+use std::process::ExitCode;
+use crate::args::Args;
+use crate::parser::GitStatus;
+use clap::Parser;
 
 mod args;
 mod git;
 mod parser;
 
-fn main() {
-	// let args = Args::parse();
-	let git_status = Stats::new_from_git_status();
-	println!("{:#?}", git_status)
+fn main() -> ExitCode {
+	let args = Args::parse();
+	let git_status = GitStatus::new_from_git_status();
+	println!("{:#?}", git_status);
+	ExitCode::SUCCESS
 }
