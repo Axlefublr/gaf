@@ -2,20 +2,22 @@ use std::process::Command;
 use crate::args::UnStageable;
 use crate::args::Stageable;
 
-pub fn status() -> Option<String> {
-	let output = Command::new("git")
+pub fn status() -> Result<String, &'static str> {
+	let output = match Command::new("git")
 		.arg("status")
 		.arg("--porcelain")
-		.output()
-		.expect("git status --porcelain failed to run");
+		.output() {
+			Err(_) => return Err("git status --porcelain failed to run. is this directory a git repository?"),
+			Ok(v) => v
+		};
 	let output = String::from_utf8(output.stdout)
 		.expect("git status --porcelain failed to convert to a string")
 		.trim_end()
 		.to_owned();
 	if output.is_empty() {
-		None
+		Err("there are no git changes in this directory")
 	} else {
-		Some(output)
+		Ok(output)
 	}
 }
 
