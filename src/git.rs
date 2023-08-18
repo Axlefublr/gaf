@@ -25,6 +25,7 @@ pub fn status() -> Result<String, &'static str> {
 }
 
 pub fn stage(what: Vec<String>, unstage_type: Stageable) -> Result<(), String> {
+	let what = what;
 	if what.is_empty() { return Err(format!("you have no {} files", unstage_type)); }
 	let mut command = Command::new("git");
 	command.arg("add");

@@ -35,27 +35,39 @@ impl GitStatus {
 
 fn parse_status(stats: &mut GitStatus) -> Result<(), &'static str> {
 	let status = git::status()?;
-	let regex = Regex::new(r"(.)(.) ([^(?: \-> )\n]+)(?: -> )?(.*)?($|\n)").unwrap();
-	let captures = regex.captures_iter(&status);
-	for capture in captures {
-		let path = capture[3].to_owned();
-		match &capture[1] {
-			"M" => stats.staged_modifications.push(path.clone()),
-			"A" => stats.added.push(path.clone()),
-			"D" => stats.staged_deletions.push(path.clone()),
-			"R" => {
-				stats.renamed.push(path.clone());
-				let staged_deletion = capture[4].to_owned();
-				stats.renamed.push(staged_deletion)
+	for line in status.lines() {
+		let mut chars = line.chars();
+		let staged_char = chars.next().unwrap();
+		let unstaged_char = chars.next().unwrap();
+		let path: String = chars.skip(1).collect();
+		let mut is_renamed = false;
+		match staged_char {
+			'M' => stats.staged_modifications.push(path.clone()),
+			'A' => stats.added.push(path.clone()),
+			'D' => stats.staged_deletions.push(path.clone()),
+			'?' => stats.new.push(path.clone()),
+			'R' => {
+				let captures = Regex::new(r"(.+) -> (.+)")
+					.unwrap()
+					.captures(&path)
+					.unwrap();
+				let staged_deleted = captures[1].to_owned();
+				let renamed_file = captures[2].to_owned();
+				stats.renamed.push(staged_deleted);
+				stats.renamed.push(renamed_file);
+				is_renamed = true;
 			}
-			"?" => stats.new.push(path.clone()),
-			&_ => (),
+			_ => (),
 		}
-		match &capture[2] {
-			"M" => stats.unstaged_modifications.push(path),
-			"D" => stats.unstaged_deletions.push(path),
-			&_ => ()
-		}
+		let path = match is_renamed {
+			true => Regex::new(".* -> (.+)").unwrap().captures(&path).unwrap()[1].to_owned(),
+			false => path,
+		};
+		match unstaged_char {
+			'M' => stats.unstaged_modifications.push(path),
+			'D' => stats.unstaged_deletions.push(path),
+			_ => (),
+		};
 	}
 	Ok(())
 }
