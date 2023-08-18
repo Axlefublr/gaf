@@ -7,9 +7,12 @@ pub fn status() -> Result<String, &'static str> {
 		.arg("status")
 		.arg("--porcelain")
 		.output() {
-			Err(_) => return Err("git status --porcelain failed to run. is this directory a git repository?"),
+			Err(_) => return Err("couldn't run `git`. is it installed and in the $PATH?"),
 			Ok(v) => v
 		};
+	if !output.status.success() {
+		return Err("this isn't a git directory")
+	}
 	let output = String::from_utf8(output.stdout)
 		.expect("git status --porcelain failed to convert to a string")
 		.trim_end()

@@ -13,8 +13,11 @@ mod parser;
 fn main() -> ExitCode {
 	let args = Args::parse();
 	let git_status = match GitStatus::new() {
-		None => return ExitCode::FAILURE,
-		Some(v) => v
+		Err(m) => {
+			eprintln!("{m}");
+			return ExitCode::FAILURE
+		},
+		Ok(v) => v
 	};
 	let result = match args.action {
 		Actions::Stage { which } => { match which {

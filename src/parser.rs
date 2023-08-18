@@ -26,18 +26,14 @@ impl GitStatus {
 		}
 	}
 
-	pub fn new() -> Option<Self> {
+	pub fn new() -> Result<Self, &'static str> {
 		let mut stats = GitStatus::blank();
 		parse_status(&mut stats)?;
-		if are_all_empty(&stats) {
-			None
-		} else {
-			Some(stats)
-		}
+		Ok(stats)
 	}
 }
 
-fn parse_status(stats: &mut GitStatus) -> Option<()> {
+fn parse_status(stats: &mut GitStatus) -> Result<(), &'static str> {
 	let status = git::status()?;
 	let regex = Regex::new(r"(.)(.) ([^(?: \-> )\n]+)(?: -> )?(.*)?($|\n)").unwrap();
 	let captures = regex.captures_iter(&status);
@@ -61,15 +57,5 @@ fn parse_status(stats: &mut GitStatus) -> Option<()> {
 			&_ => ()
 		}
 	}
-	Some(())
-}
-
-fn are_all_empty(stats: &GitStatus) -> bool {
-	stats.added.is_empty()
-		&& stats.unstaged_deletions.is_empty()
-		&& stats.unstaged_modifications.is_empty()
-		&& stats.renamed.is_empty()
-		&& stats.staged_modifications.is_empty()
-		&& stats.new.is_empty()
-		&& stats.staged_deletions.is_empty()
+	Ok(())
 }
