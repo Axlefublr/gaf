@@ -12,11 +12,10 @@ mod parser;
 
 fn main() -> ExitCode {
 	let args = Args::parse();
-	let git_status = GitStatus::new();
-	if git_status.is_none() {
-		return ExitCode::FAILURE;
+	let git_status = match GitStatus::new() {
+		None => return ExitCode::FAILURE,
+		Some(v) => v
 	};
-	let git_status = git_status.unwrap();
 	let result = match args.action {
 		Actions::Stage { which } => { match which {
 			Stageable::Deleted => git::stage(git_status.unstaged_deletions, Stageable::Deleted),
