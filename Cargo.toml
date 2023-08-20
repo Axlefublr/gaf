@@ -1,6 +1,13 @@
 [package]
+authors = ["Axlefublr"]
+license = "MIT"
+description = "A way to stage/unstage a specific type of change. With this program, you can stage only unstaged modifications, for example"
+readme = "README.md"
+documentation = "https://docs.rs/gaf"
+homepage = "https://github.com/Axlefublr/gaf"
+repository = "https://github.com/Axlefublr/gaf"
 name = "gaf"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
