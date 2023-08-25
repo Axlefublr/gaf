@@ -37,10 +37,6 @@ Usage: gaf stage <WHICH>
 Arguments:
   <WHICH>
           [possible values: new, modified, deleted]
-
-Options:
-  -h, --help
-          Print help
 ```
 
 ### gaf unstage
@@ -50,10 +46,6 @@ Usage: gaf unstage <WHICH>
 Arguments:
   <WHICH>
           [possible values: added, modified, renamed, deleted]
-
-Options:
-  -h, --help
-          Print help
 ```
 
 ## Installation
