@@ -1,5 +1,4 @@
 use std::fmt::Display;
-
 use clap::Parser;
 use clap::Subcommand;
 use clap::ValueEnum;
@@ -13,10 +12,12 @@ pub struct Args {
 
 #[derive(Subcommand)]
 pub enum Actions {
+	#[command(visible_alias = "s")]
 	Stage {
 		#[arg(value_enum)]
 		which: Stageable,
 	},
+	#[command(visible_alias = "u")]
 	Unstage {
 		#[arg(value_enum)]
 		which: UnStageable,
