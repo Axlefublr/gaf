@@ -26,7 +26,7 @@ impl GitStatus {
 		}
 	}
 
-	pub fn new() -> Result<Self, &'static str> {
+	pub fn new() -> Result<Self, String> {
 		let mut model = GitStatus::blank();
 		let git_status = git::status()?;
 		parse_status(&mut model, &git_status);
