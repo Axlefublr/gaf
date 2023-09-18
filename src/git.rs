@@ -13,7 +13,9 @@ pub fn status() -> Result<String, String> {
 	};
 	if !output.status.success() {
 		return Err(String::from_utf8(output.stderr)
-			.expect("git status' stderr should convert to a string"));
+			.expect("git status' stderr should convert to a string")
+			.trim_end()
+			.to_owned());
 	}
 	let output = String::from_utf8(output.stdout)
 		.expect("git status --porcelain failed to convert to a string")
@@ -36,8 +38,14 @@ pub fn stage(what: Vec<String>, unstage_type: Stageable) -> Result<(), String> {
 	for path in what {
 		command.arg(path);
 	}
-	command.output().expect("git add <files> failed to run");
-	Ok(())
+	let output = command.output().expect("`git` is not in your $PATH");
+	match output.status.success() {
+		true => Ok(()),
+		false => Err(String::from_utf8(output.stderr)
+			.expect("git add stderr should convert to a string")
+			.trim_end()
+			.to_owned()),
+	}
 }
 
 pub fn unstage(what: Vec<String>, unstage_type: UnStageable) -> Result<(), String> {
@@ -49,8 +57,12 @@ pub fn unstage(what: Vec<String>, unstage_type: UnStageable) -> Result<(), Strin
 	for path in what {
 		command.arg(path);
 	}
-	command
-		.output()
-		.expect("git restore --staged <files> failed to run");
-	Ok(())
+	let output = command.output().expect("`git` is not in your $PATH");
+	match output.status.success() {
+		true => Ok(()),
+		false => Err(String::from_utf8(output.stderr)
+			.expect("git restore stderr should convert to a string")
+			.trim_end()
+			.to_owned()),
+	}
 }
