@@ -22,7 +22,7 @@ fn main() -> ExitCode {
 	let result = match args.action {
 		Actions::Stage { which } => { match which {
 			Stageable::Deleted => git::stage(git_status.unstaged_deletions, Stageable::Deleted),
-			Stageable::Modified => git::stage(dbg!(git_status.unstaged_modifications), Stageable::Modified),
+			Stageable::Modified => git::stage(git_status.unstaged_modifications, Stageable::Modified),
 			Stageable::New => git::stage(git_status.new, Stageable::New),
 		}},
 		Actions::Unstage { which } => { match which {

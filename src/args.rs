@@ -1,7 +1,6 @@
 use std::fmt::Display;
 use clap::Parser;
 use clap::Subcommand;
-use clap::ValueEnum;
 
 #[derive(Parser)]
 #[command(author, about, next_line_help = true)]
@@ -14,20 +13,23 @@ pub struct Args {
 pub enum Actions {
 	#[command(visible_alias = "s")]
 	Stage {
-		#[arg(value_enum)]
+		#[command(subcommand)]
 		which: Stageable,
 	},
 	#[command(visible_alias = "u")]
 	Unstage {
-		#[arg(value_enum)]
+		#[command(subcommand)]
 		which: UnStageable,
 	},
 }
 
-#[derive(ValueEnum, Clone, Copy)]
+#[derive(Subcommand)]
 pub enum Stageable {
+	#[command(visible_alias = "n")]
 	New,
+	#[command(visible_alias = "m")]
 	Modified,
+	#[command(visible_alias = "d")]
 	Deleted,
 }
 
@@ -41,11 +43,15 @@ impl Display for Stageable {
 	}
 }
 
-#[derive(ValueEnum, Clone, Copy)]
+#[derive(Subcommand)]
 pub enum UnStageable {
+	#[command(visible_alias = "a")]
 	Added,
+	#[command(visible_alias = "m")]
 	Modified,
+	#[command(visible_alias = "r")]
 	Renamed,
+	#[command(visible_alias = "d")]
 	Deleted,
 }
 

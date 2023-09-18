@@ -46,12 +46,11 @@ pub fn status() -> Result<String, String> {
 	if git_status.is_empty() {
 		Err("there are no git changes in this directory".to_owned())
 	} else {
-		Ok(dbg!(git_status))
+		Ok(git_status)
 	}
 }
 
 pub fn stage(what: Vec<String>, unstage_type: Stageable) -> Result<(), String> {
-	let what = dbg!(what);
 	if what.is_empty() {
 		return Err(format!("you have no {} files", unstage_type));
 	}
