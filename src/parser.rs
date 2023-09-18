@@ -30,7 +30,7 @@ impl GitStatus {
 		let mut model = GitStatus::blank();
 		let git_status = git::status()?;
 		parse_status(&mut model, &git_status);
-		Ok(model)
+		Ok(dbg!(model))
 	}
 }
 
