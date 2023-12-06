@@ -50,12 +50,8 @@ Arguments:
 
 ## Installation
 
-With binstall
-```
-cargo binstall -y gaf
-```
-
-Compile from source
 ```
 cargo install gaf
 ```
+
+`cargo-binstall` and `cargo-quickinstall` are also supported.
