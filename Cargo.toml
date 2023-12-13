@@ -1,7 +1,7 @@
 [package]
 authors = ["Axlefublr"]
 license = "MIT"
-description = "A way to stage/unstage a specific type of change. With this program, you can stage only unstaged modifications, for example"
+description = "A way to stage/unstage a specific type of git change."
 readme = "README.md"
 documentation = "https://docs.rs/gaf"
 homepage = "https://github.com/Axlefublr/gaf"
