@@ -3,7 +3,7 @@ use clap::Subcommand;
 use std::fmt::Display;
 
 #[derive(Parser)]
-#[command(author, about, next_line_help = true)]
+#[command(author, version, about)]
 pub struct Args {
     #[command(subcommand)]
     pub action: Actions,
