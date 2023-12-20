@@ -1,5 +1,5 @@
+use std::error::Error;
 use regex::Regex;
-
 use crate::git;
 
 #[derive(Debug)]
@@ -26,7 +26,7 @@ impl GitStatus {
         }
     }
 
-    pub fn new() -> Result<Self, String> {
+    pub fn new() -> Result<Self, Box<dyn Error>> {
         let mut model = GitStatus::blank();
         let git_status = git::status()?;
         parse_status(&mut model, &git_status);
