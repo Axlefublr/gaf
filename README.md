@@ -1,6 +1,6 @@
 # gaf
 
-*that's how dogs bark in russian*
+> that's how dogs bark in russian
 
 This terminal program will let you stage or unstage different types of git changes.
 
@@ -19,9 +19,9 @@ Usage: gaf <COMMAND>
 
 Commands:
   stage
-          
+
   unstage
-          
+
   help
           Print this message or the help of the given subcommand(s)
 
@@ -48,10 +48,16 @@ Arguments:
           [possible values: added, modified, renamed, deleted]
 ```
 
-## Installation
+## Install
 
 ```
 cargo install gaf
 ```
 
 `cargo-binstall` and `cargo-quickinstall` are also supported.
+
+## Uninstall
+
+```
+cargo uninstall gaf
+```
