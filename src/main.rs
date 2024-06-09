@@ -1,10 +1,12 @@
-use crate::args::Args;
-use crate::parser::GitStatus;
+use std::error::Error;
+
 use args::Actions;
 use args::Stageable;
 use args::UnStageable;
 use clap::Parser;
-use std::error::Error;
+
+use crate::args::Args;
+use crate::parser::GitStatus;
 
 mod args;
 mod git;
@@ -25,6 +27,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             UnStageable::Modified => git::unstage(git_status.staged_modifications, UnStageable::Modified)?,
             UnStageable::Renamed => git::unstage(git_status.renamed, UnStageable::Renamed)?,
         },
+        Actions::Print { which } => git_status.print(which),
     };
     Ok(())
 }

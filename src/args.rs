@@ -1,6 +1,7 @@
+use std::fmt::Display;
+
 use clap::Parser;
 use clap::Subcommand;
-use std::fmt::Display;
 
 #[derive(Parser)]
 #[command(author, version, about)]
@@ -20,6 +21,12 @@ pub enum Actions {
     Unstage {
         #[command(subcommand)]
         which: UnStageable,
+    },
+    /// Print all the file paths of a type of a change, separated by newlines.
+    #[command(visible_alias = "p")]
+    Print {
+        #[command(subcommand)]
+        which: Change,
     },
 }
 
@@ -64,4 +71,24 @@ impl Display for UnStageable {
             Self::Renamed => "renamed",
         })
     }
+}
+
+#[derive(Subcommand)]
+pub enum Change {
+    #[command(visible_alias = "n")]
+    New,
+    #[command(visible_alias = "m")]
+    Modified,
+    #[command(visible_alias = "d")]
+    Deleted,
+    #[command(visible_alias = "a")]
+    Added,
+    /// Staged modified
+    #[command(visible_alias = "s")]
+    Staged,
+    #[command(visible_alias = "r")]
+    Renamed,
+    /// Staged deleted
+    #[command(visible_alias = "t")]
+    Trashed,
 }

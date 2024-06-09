@@ -1,28 +1,31 @@
 use std::error::Error;
+
 use regex::Regex;
+
+use crate::args::Change;
 use crate::git;
 
 #[derive(Debug)]
 pub struct GitStatus {
-    pub new: Vec<String>,
-    pub added: Vec<String>,
-    pub staged_modifications: Vec<String>,
+    pub new:                    Vec<String>,
+    pub added:                  Vec<String>,
+    pub staged_modifications:   Vec<String>,
     pub unstaged_modifications: Vec<String>,
-    pub renamed: Vec<String>,
-    pub unstaged_deletions: Vec<String>,
-    pub staged_deletions: Vec<String>,
+    pub renamed:                Vec<String>,
+    pub unstaged_deletions:     Vec<String>,
+    pub staged_deletions:       Vec<String>,
 }
 
 impl GitStatus {
     fn blank() -> Self {
         Self {
-            new: vec![],
-            added: vec![],
-            staged_modifications: vec![],
+            new:                    vec![],
+            added:                  vec![],
+            staged_modifications:   vec![],
             unstaged_modifications: vec![],
-            renamed: vec![],
-            unstaged_deletions: vec![],
-            staged_deletions: vec![],
+            renamed:                vec![],
+            unstaged_deletions:     vec![],
+            staged_deletions:       vec![],
         }
     }
 
@@ -31,6 +34,19 @@ impl GitStatus {
         let git_status = git::status()?;
         parse_status(&mut model, &git_status);
         Ok(model)
+    }
+
+    pub fn print(&self, which: Change) {
+        let changes = match which {
+            Change::New => &self.new,
+            Change::Added => &self.added,
+            Change::Staged => &self.staged_modifications,
+            Change::Deleted => &self.unstaged_deletions,
+            Change::Renamed => &self.renamed,
+            Change::Modified => &self.unstaged_modifications,
+            Change::Trashed => &self.staged_deletions,
+        };
+        println!("{}", changes.join("\n"))
     }
 }
 
@@ -53,7 +69,7 @@ fn parse_status(model: &mut GitStatus, git_status: &str) {
                 model.renamed.push(staged_deleted);
                 model.renamed.push(renamed_file);
                 is_renamed = true;
-            }
+            },
             _ => (),
         }
         let path = match is_renamed {
