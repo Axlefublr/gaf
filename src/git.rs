@@ -1,7 +1,8 @@
-use crate::args::Stageable;
-use crate::args::UnStageable;
 use std::error::Error;
 use std::process::Command;
+
+use crate::args::Stageable;
+use crate::args::UnStageable;
 
 fn get_root_dir() -> Result<String, Box<dyn Error>> {
     let output = Command::new("git")
